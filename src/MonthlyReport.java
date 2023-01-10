@@ -22,6 +22,19 @@ public class MonthlyReport {
         }
     }
 
+    class ResultItem {
+        String resultName;
+        int resultSum;
+
+        public void setResultName(String resultName) {
+            this.resultName = resultName;
+        }
+
+        public void setResultSum(int resultSum) {
+            this.resultSum = resultSum;
+        }
+    }
+
     HashMap<Integer, ArrayList<Item>> monthReportRecord() {
         for (int i = 1; i < 4; i++) {
             String path = "resources/m.20210" + i + ".csv";
@@ -41,28 +54,17 @@ public class MonthlyReport {
         for (int i = 1; i < 13; i++) {
             if (monthlyReport.containsKey(i)) {
                 System.out.println(printMonthName(i));
-                System.out.println("Максимальная прибыль: " + findMaxProfitSum(i, monthlyReport)
-                        + " " + findMaxProfitItem(i, monthlyReport));
-                System.out.println("Максимальная трата: " + findMaxExpenseSum(i, monthlyReport)
-                        + " " + findMaxExpenseItem(i, monthlyReport));
+                System.out.println("Максимальная прибыль: " + findMaxProfit(i, monthlyReport).resultSum
+                        + " " + findMaxProfit(i, monthlyReport).resultName);
+                System.out.println("Максимальная трата: " + findMaxExpense(i, monthlyReport).resultSum
+                        + " " + findMaxExpense(i, monthlyReport).resultName);
                 System.out.println("-----");
             }
         }
     }
 
-    int findMaxExpenseSum(int month, HashMap<Integer, ArrayList<Item>> map) {
-        int maxExpense = 0;
-        for (Item item : map.get(month)) {
-            if (item.isExpense) {
-                if (maxExpense < item.quantity * item.sumOfOne) {
-                    maxExpense = item.quantity * item.sumOfOne;
-                }
-            }
-        }
-        return maxExpense;
-    }
-
-    String findMaxExpenseItem(int month, HashMap<Integer, ArrayList<Item>> map) {
+    ResultItem findMaxExpense(int month, HashMap<Integer, ArrayList<Item>> map) {
+        ResultItem resultItem = new ResultItem();
         int maxExpense = 0;
         String itemName = "";
         for (Item item : map.get(month)) {
@@ -73,22 +75,13 @@ public class MonthlyReport {
                 }
             }
         }
-        return itemName;
+        resultItem.setResultName(itemName);
+        resultItem.setResultSum(maxExpense);
+        return resultItem;
     }
 
-    int findMaxProfitSum(int month, HashMap<Integer, ArrayList<Item>> map) {
-        int maxProfit = 0;
-        for (Item item : map.get(month)) {
-            if (!item.isExpense) {
-                if (maxProfit < item.quantity * item.sumOfOne) {
-                    maxProfit = item.quantity * item.sumOfOne;
-                }
-            }
-        }
-        return maxProfit;
-    }
-
-    String findMaxProfitItem(int month, HashMap<Integer, ArrayList<Item>> map) {
+    ResultItem findMaxProfit(int month, HashMap<Integer, ArrayList<Item>> map) {
+        ResultItem resultItem = new ResultItem();
         int maxProfit = 0;
         String itemName = "";
         for (Item item : map.get(month)) {
@@ -99,7 +92,9 @@ public class MonthlyReport {
                 }
             }
         }
-        return itemName;
+        resultItem.setResultName(itemName);
+        resultItem.setResultSum(maxProfit);
+        return resultItem;
     }
 
     double findProfitSum(int month, HashMap<Integer, ArrayList<Item>> map) {

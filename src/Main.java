@@ -1,43 +1,25 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Автоматизация бухгалтерии");
-        printMenu();
         Scanner scanner = new Scanner(System.in);
-        MonthlyReport monthlyReport = new MonthlyReport();
-        YearlyReport yearlyReport = new YearlyReport();
-        HashMap<Integer, ArrayList<MonthlyReport.Item>> monthReport = new HashMap<>();
-        HashMap<Integer, ArrayList<YearlyReport.Item>> yearReport = new HashMap<>();
-        HashMap<Integer, YearlyReport.MonthData> parsedYearReport= new HashMap<>();
+        ReportHelper reportHelper = new ReportHelper();
 
         while (true) {
+            printMenu();
             int userCommand = scanner.nextInt();
             if (userCommand == 1) {
-                monthReport = monthlyReport.monthReportRecord();
+                reportHelper.saveMonthlyReport();
             } else if (userCommand == 2) {
-                yearReport = yearlyReport.yearReportRecord();
-                parsedYearReport = yearlyReport.parseMonthData(2021, yearReport);
+                reportHelper.saveYearlyParsedReport();
             } else if (userCommand == 3) {
-                for (int i = 1; i < 13; i++) {
-                    if (monthReport.containsKey(i) && parsedYearReport.containsKey(i)) {
-                        double monthProfit = monthlyReport.findProfitSum(i, monthReport);
-                        double monthExpense = monthlyReport.findExpenseSum(i, monthReport);
-                        if (monthProfit == parsedYearReport.get(i).profit
-                            && monthExpense == parsedYearReport.get(i).expense) {
-                            System.out.println("Отчет за месяц 0" + i + " сверен успешно.");
-                        } else {
-                            System.out.println("Отчет за месяц 0" + i + " не сходится. Ошибка!");
-                        }
-                    }
-                }
+                reportHelper.compareReports();
             } else if (userCommand == 4) {
-                monthlyReport.printMonthReport();
+                reportHelper.printMonthReport();
             } else if (userCommand == 5) {
-                yearlyReport.printYearReport();
+                reportHelper.printYearlyReport();
             } else if (userCommand == 6) {
                 System.out.println("Приложение закрыто");
                 break;

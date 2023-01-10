@@ -55,13 +55,13 @@ public class YearlyReport {
                 parsedMonthData.put(month.month, new MonthData());
                 if (!month.isExpense) {
                     parsedMonthData.get(month.month).setProfit(month.amount);
-                } else if (month.isExpense) {
+                } else {
                     parsedMonthData.get(month.month).setExpense(month.amount);
                 }
             } else {
                 if (!month.isExpense) {
                     parsedMonthData.get(month.month).setProfit(month.amount);
-                } else if (month.isExpense) {
+                } else {
                     parsedMonthData.get(month.month).setExpense(month.amount);
                 }
             }
